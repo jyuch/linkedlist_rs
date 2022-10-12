@@ -42,3 +42,13 @@ fn can_return_list_length_1() {
 
     assert_eq!(1, list.len());
 }
+
+#[test]
+fn list_can_iterate() {
+    let mut list = LinkedList::new();
+    list.push(1);
+    let mut iter = list.into_iter();
+
+    assert_eq!(Some(1), iter.next());
+    assert_eq!(None, iter.next());
+}

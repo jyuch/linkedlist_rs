@@ -38,8 +38,35 @@ impl<T> LinkedList<T> {
         while let Cons(_, n) = head {
             length += 1;
             head = &n;
-        };
+        }
 
         length
+    }
+}
+
+impl<T> IntoIterator for LinkedList<T> {
+    type Item = T;
+    type IntoIter = IntoIter<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        IntoIter { current: self.head }
+    }
+}
+
+pub struct IntoIter<T> {
+    current: Cell<T>,
+}
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match replace(&mut self.current, Nil) {
+            Nil => None,
+            Cons(v, n) => {
+                self.current = *n;
+                Some(v)
+            }
+        }
     }
 }
