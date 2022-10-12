@@ -70,3 +70,30 @@ impl<T> Iterator for IntoIter<T> {
         }
     }
 }
+
+pub struct IntoIterRef<'a, T> {
+    current: &'a Cell<T>,
+}
+
+impl<'a, T> IntoIterator for &'a LinkedList<T> {
+    type Item = &'a T;
+    type IntoIter = IntoIterRef<'a, T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        IntoIterRef { current: &self.head }
+    }
+}
+
+impl<'a, T> Iterator for IntoIterRef<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match replace(&mut self.current, &Nil) {
+            Nil => None,
+            Cons(v, n) => {
+                self.current = n;
+                Some(v)
+            }
+        }
+    }
+}
