@@ -30,4 +30,16 @@ impl<T> LinkedList<T> {
             }
         }
     }
+
+    pub fn len(&self) -> usize {
+        let mut length = 0;
+        let mut head = &self.head;
+
+        while let Cons(_, n) = head {
+            length += 1;
+            head = &n;
+        };
+
+        length
+    }
 }
