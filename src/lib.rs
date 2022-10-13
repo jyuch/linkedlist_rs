@@ -80,7 +80,9 @@ impl<'a, T> IntoIterator for &'a LinkedList<T> {
     type IntoIter = IntoIterRef<'a, T>;
 
     fn into_iter(self) -> Self::IntoIter {
-        IntoIterRef { current: &self.head }
+        IntoIterRef {
+            current: &self.head,
+        }
     }
 }
 
@@ -96,4 +98,20 @@ impl<'a, T> Iterator for IntoIterRef<'a, T> {
             }
         }
     }
+}
+
+#[macro_export]
+macro_rules! list {
+    () => {
+        $crate::LinkedList::new()
+    };
+    ( $( $x:expr ),* ) => {
+        {
+            let mut temp  = $crate::LinkedList::new();
+            $(
+                temp.push($x);
+            )*
+            temp
+        }
+    };
 }
